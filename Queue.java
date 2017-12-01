@@ -1,100 +1,87 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package mydatastructures;
+package javaProjectNew;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-/**
- *
- * @author Bikramjit Singh
- */
-public class Queue<Item> implements Iterable<Item> {
-      private Node<Item> first;    // beginning of queue
-    private Node<Item> last;     // end of queue
-    private int n;               // number of elements on queue
+public class Queue<Item>  implements Iterable<Item>{
+	private Node<Item> first,last;
+	int n;
+	
+	public Queue(){
+		first=null;
+		last=null;
+		n=0;
+	}
+	
+	
+	private static class Node<Item>{
+		Item item;
+		Node<Item> next;
+	}
+	
+	public boolean isEmpty()
+	{
+		return first==null;
+	}
+	
+	public int size(){
+		return n;
+	}
+	
+	public void enqueue(Item item){
+		Node<Item> oldlast=last;
+		last=new Node<Item>();
+		last.item=item;
+		last.next=null;
+		if(isEmpty()) first=last;
+		else oldlast.next=last;
+		n++;
+			
+		
+	}
+	
+	public Item dequeue(){
+		Item item;
+		item=first.item;
+		first=first.next;
+		n--;
+		if(isEmpty()) last=null;
+		return item;
+	}
+	@Override
+	public Iterator<Item> iterator() {
+		// TODO Auto-generated method stub
+		return new ListIterator<Item>(first);
+	}
+	
+	private static class ListIterator<Item> implements Iterator<Item> {
+        private Node<Item> current;
 
-    @Override
-    public Iterator<Item> iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    // helper linked list class
-    private static class Node<Item> {
-        private Item item;
-        private Node<Item> next;
-    }
-
-    /**
-     * Initializes an empty queue.
-     */
-    public Queue() {
-        first = null;
-        last  = null;
-        n = 0;
-    }
-
-    /**
-     * Returns true if this queue is empty.
-     *
-     * @return {@code true} if this queue is empty; {@code false} otherwise
-     */
-    public boolean isEmpty() {
-        return first == null;
-    }
-
-    /**
-     * Returns the number of items in this queue.
-     *
-     * @return the number of items in this queue
-     */
-    public int size() {
-        return n;
-    }
-    
-    public Item peek() {
-        if (isEmpty()) throw new NoSuchElementException("Queue underflow");
-        return first.item;
-    }
-
-    /**
-     * Adds the item to this queue.
-     *
-     * @param  item the item to add
-     */
-    public void enqueue(Item item) {
-        Node<Item> oldlast = last;
-        last = new Node<Item>();
-        last.item = item;
-        last.next = null;
-        if (isEmpty()) first = last;
-        else           oldlast.next = last;
-        n++;
-    }
-
-    /**
-     * Removes and returns the item on this queue that was least recently added.
-     *
-     * @return the item on this queue that was least recently added
-     * @throws NoSuchElementException if this queue is empty
-     */
-    public Item dequeue() {
-        if (isEmpty()) throw new NoSuchElementException("Queue underflow");
-        Item item = first.item;
-        first = first.next;
-        n--;
-        if (isEmpty()) last = null;   // to avoid loitering
-        return item;
-    }
-     public String toString() {
-        StringBuilder s = new StringBuilder();
-        for (Item item : this) {
-            s.append(item);
-            s.append(' ');
+        public ListIterator(Node<Item> first) {
+            current = first;
         }
-        return s.toString();
-    } 
+
+        public boolean hasNext()  { return current != null;                     }
+        public void remove()      { throw new UnsupportedOperationException();  }
+
+        public Item next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            Item item = current.item;
+            current = current.next; 
+            return item;
+        }
+    }
+	
+	public static void main(String args[]){
+		Queue<Integer> queue=new Queue<Integer>();
+		queue.enqueue(11);
+		queue.enqueue(13);
+		queue.enqueue(14);
+		queue.enqueue(15);
+		for(int w :queue)
+		{
+			System.out.println(w);
+		}
+	}
+
 }
